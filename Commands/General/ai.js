@@ -76,17 +76,11 @@ module.exports = {
                         });
                         break;
                     case "v2":
-                        const attachment = new AttachmentBuilder(getImage, { name: "Image.png" });
-                        console.log(attachment)
-                        // await uAPI.V1.AI.Google.Gemini.ProVisionModelUrl(getPrompt).then(result => {
-                        //     if (result.status) return interaction.editReply({
-                        //         content: "",
-                        //         embeds: []
-                        //     });
-                        //     if (!result.status) return interaction.editReply({
-                        //         content: result.message
-                        //     });
-                        // });
+                        const genAttachment = new AttachmentBuilder(getImage, { name: "Image.png" });
+                        await uAPI.V1.AI.Google.Gemini.ProVisionModelUrl(genAttachment.attachment.url, getPrompt).then(result => {
+                            if (result.status) return client.sendEmbedText(interaction, result.data.text);
+                            if (!result.status) return client.editReply(interaction, result.message);
+                        });
                         break;
                 
                     default:
