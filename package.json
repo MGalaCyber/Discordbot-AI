@@ -1,0 +1,33 @@
+{
+  "name": "discordbot-ai",
+  "version": "1.0.0",
+  "description": "Discord bot with Artificial Intelligence from Universe API",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MGalaCyber/Discordbot-AI.git"
+  },
+  "keywords": [
+    "AI",
+    "Universe",
+    "API"
+  ],
+  "author": "MGalaCyber",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/MGalaCyber/Discordbot-AI/issues"
+  },
+  "homepage": "https://github.com/MGalaCyber/Discordbot-AI#readme",
+  "dependencies": {
+    "@mgalacyber/universeapi": "^2.1.10",
+    "betterlogs.js": "^1.3.0",
+    "colors": "^1.4.0",
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.4.5",
+    "fs": "^0.0.1-security"
+  }
+}
