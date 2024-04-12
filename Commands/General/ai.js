@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, ChatInputCommandInteraction, Client, AttachmentBuilder, EmbedBuilder } = require("discord.js");
-const { universeAPIClient } = require("@mgalacyber/universeapi");
-const uAPI = new universeAPIClient(process.env.UNIVERSE_TOKEN);
+const { UniverseClient } = require("@mgalacyber/universeapi");
+const uAPI = new UniverseClient(process.env.UNIVERSE_TOKEN);
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -8,10 +8,17 @@ module.exports = {
         .setDescription("Start conversation using AI")
         .addSubcommandGroup((grup) => grup.setName("google").setDescription("Start conversation using Google")
             .addSubcommand((sub) => sub.setName("gemini").setDescription("Start conversation using Google Gemini")
-                .addStringOption((string) => string.setName("model").setDescription("💡 Select the model version.").setRequired(true)
+                .addStringOption((string) => string.setName("model").setDescription("💡 Select the model.").setRequired(true)
                     .addChoices(
-                        { name: "v1 (Text Only)", value: "v1" },
-                        { name: "v2 (With Vision, Image upload option required)", value: "v2" },
+                        { name: "GEMINI 1.0-PRO", value: "1.0-pro" },
+                        { name: "GEMINI 1.0-PRO-VISION (Deprecated)", value: "1.0-pro-vision" },
+                    )
+                )
+                .addStringOption((string) => string.setName("version").setDescription("💡 Select the api model version.").setRequired(true)
+                    .addChoices(
+                        { name: "v1 (Support: 1.0-Pro, (1.0-Pro-Vision > {Image required}))", value: "1" },
+                        { name: "v2 (Support: 1.0-Pro)", value: "2" },
+                        { name: "v3 (Support: 1.0-Pro)", value: "3" },
                     )
                 )
                 .addStringOption((string) => string.setName("prompt").setDescription("💡 Input the prompt.").setRequired(true))
@@ -19,33 +26,54 @@ module.exports = {
             )
         )
         .addSubcommand((sub) => sub.setName("blackbox").setDescription("Start conversation using Blackbox")
-            .addStringOption((string) => string.setName("model").setDescription("💡 Select the model version.").setRequired(true)
+            .addStringOption((string) => string.setName("version").setDescription("💡 Select the api model version.").setRequired(true)
                 .addChoices(
-                    { name: "v1 (Model 1)", value: "v1" },
-                    { name: "v2 (Model 4)", value: "v2" },
+                    { name: "v1", value: "1" },
+                    { name: "v2", value: "2" },
                 )
             )
             .addStringOption((string) => string.setName("prompt").setDescription("💡 Input the prompt.").setRequired(true))
         )
-        .addSubcommand((sub) => sub.setName("chatgpt").setDescription("Start conversation using ChatGPT")
-            .addStringOption((string) => string.setName("model").setDescription("💡 Select the model version.").setRequired(true)
+        .addSubcommand((sub) => sub.setName("openai").setDescription("Start conversation using OpenAI")
+            .addStringOption((string) => string.setName("model").setDescription("💡 Select the model.").setRequired(true)
                 .addChoices(
-                    { name: "v1 (Model 3.5)", value: "v1" },
-                    { name: "v2 (Model 4)", value: "v2" },
-                    { name: "v3 (Model 4)", value: "v3" },
+                    { name: "GPT 3.5-Turbo", value: "gpt3.5-turbo" },
+                    { name: "GPT 4", value: "gpt4" },
+                    { name: "DALLE-2", value: "dalle-2" },
+                )
+            )
+            .addStringOption((string) => string.setName("version").setDescription("💡 Select the api model version.").setRequired(true)
+                .addChoices(
+                    { name: "v1 (Support: GPT3.5-Turbo, GPT4, Dalle-2)", value: "1" },
+                    { name: "v2 (Support: GPT3.5-Turbo, GPT4, Dalle-2)", value: "2" },
+                    { name: "v3 (Support: GPT3.5-Turbo, GPT4)", value: "3" },
+                    { name: "v4 (Support: GPT3.5-Turbo)", value: "4" },
+                    { name: "v5 (Support: GPT3.5-Turbo)", value: "5" },
+                    { name: "v6 (Support: GPT3.5-Turbo)", value: "6" },
+                    { name: "v7 (Support: GPT3.5-Turbo)", value: "7" },
+                    { name: "v8 (Support: GPT3.5-Turbo)", value: "8" },
+                )
+            )
+            .addStringOption((string) => string.setName("prompt").setDescription("💡 Input the prompt.").setRequired(true))
+        )
+        .addSubcommand((sub) => sub.setName("text2image").setDescription("Start conversation using Text To Image")
+            .addStringOption((string) => string.setName("version").setDescription("💡 Select the api model version.").setRequired(true)
+                .addChoices(
+                    { name: "v1", value: "1" },
+                    { name: "v2", value: "2" },
+                    { name: "v3", value: "3" },
+                    { name: "v4", value: "4" },
+                    { name: "v5", value: "5" },
+                    { name: "v6", value: "6" },
+                    { name: "v7", value: "7" },
                 )
             )
             .addStringOption((string) => string.setName("prompt").setDescription("💡 Input the prompt.").setRequired(true))
         )
         .addSubcommand((sub) => sub.setName("stablediffusion").setDescription("Start conversation using Stable Diffusion")
-            .addStringOption((string) => string.setName("model").setDescription("💡 Select the model version.").setRequired(true)
+            .addStringOption((string) => string.setName("version").setDescription("💡 Select the api model version.").setRequired(true)
                 .addChoices(
-                    { name: "v1", value: "v1" },
-                    { name: "v2", value: "v2" },
-                    { name: "v3", value: "v3" },
-                    { name: "v4", value: "v4" },
-                    { name: "v5", value: "v5" },
-                    { name: "v6", value: "v6" },
+                    { name: "v1", value: "1" },
                 )
             )
             .addStringOption((string) => string.setName("prompt").setDescription("💡 Input the prompt.").setRequired(true))
@@ -61,26 +89,40 @@ module.exports = {
         const getSubCommandGroup = interaction.options.getSubcommandGroup();
         const getSubCommand = interaction.options.getSubcommand();
         const getPrompt = interaction.options.getString("prompt");
-        const getModel = interaction.options.getString("model");
         const getImage = interaction.options.getAttachment("image");
+        const getVersion = interaction.options.getString("version");
+        const getModel = interaction.options.getString("model");
         
         client.sendReply(interaction, "Processing... Please wait.");
 
         if (getSubCommandGroup === "google") {
             if (getSubCommand === "gemini") {
                 switch (getModel) {
-                    case "v1":
-                        await uAPI.V1.AI.Google.Gemini.Pro(getPrompt).then(result => {
+                    case "1.0-pro":
+                        await uAPI.V1.AI.Google.Gemini.Text({
+                            model: getModel,
+                            version: parseInt(getVersion),
+                            prompt: getPrompt
+            
+                        }).then(result => {
                             if (result.status) return client.sendEmbedText(interaction, result.data.text);
                             if (!result.status) return client.editReply(interaction, result.message);
                         });
+                        
                         break;
-                    case "v2":
-                        const genAttachment = new AttachmentBuilder(getImage, { name: "Image.png" });
-                        await uAPI.V1.AI.Google.Gemini.ProVisionModelUrl(genAttachment.attachment.url, getPrompt).then(result => {
+                    case "1.0-pro-vision":
+                        await uAPI.V1.AI.Google.Gemini.Vision({
+                            model: getModel,
+                            type: "url",
+                            version: parseInt(getVersion),
+                            image: getImage,
+                            prompt: getPrompt
+            
+                        }).then(result => {
                             if (result.status) return client.sendEmbedText(interaction, result.data.text);
                             if (!result.status) return client.editReply(interaction, result.message);
                         });
+                        
                         break;
                 
                     default:
@@ -89,99 +131,66 @@ module.exports = {
             }
         }
         if (getSubCommand === "blackbox") {
-            switch (getModel) {
-                case "v1":
-                    await uAPI.V1.AI.Blackbox.Model1(getPrompt).then(result => {
-                        if (result.status) return client.sendEmbedText(interaction, result.data.text);
-                        if (!result.status) return client.editReply(interaction, result.message);
-                    });
-                    break;
+            await uAPI.V1.AI.Blackbox.Text({
+                version: parseInt(getVersion),
+                prompt: getPrompt
 
-                case "v2":
-                    await uAPI.V1.AI.Blackbox.Model2v4(getPrompt).then(result => {
+            }).then(result => {
+                if (result.status) return client.sendEmbedText(interaction, result.data.text);
+                if (!result.status) return client.editReply(interaction, result.message);
+            });
+        }
+        if (getSubCommand === "openai") {
+            switch (getModel) {
+                case "gpt3.5-turbo":
+                case "gpt4":
+                    await uAPI.V1.AI.OpenAI.GPT.Text({
+                        model: getModel,
+                        version: parseInt(getVersion),
+                        prompt: getPrompt
+        
+                    }).then(result => {
                         if (result.status) return client.sendEmbedText(interaction, result.data.text);
                         if (!result.status) return client.editReply(interaction, result.message);
                     });
+                    
+                    break;
+                case "dalle-2":
+                    await uAPI.V1.AI.OpenAI.DALLE.Generate({
+                        model: getModel,
+                        version: parseInt(getVersion),
+                        prompt: getPrompt
+        
+                    }).then(result => {
+                        if (result.status) return client.sendEmbedImage(interaction, result.data.url);
+                        if (!result.status) return client.editReply(interaction, result.message);
+                    });
+                    
                     break;
             
                 default:
                     break;
             }
         }
-        if (getSubCommand === "chatgpt") {
-            switch (getModel) {
-                case "v1":
-                    await uAPI.V1.AI.ChatGPT.Model6(getPrompt).then(result => {
-                        if (result.status) return client.sendEmbedText(interaction, result.data.text);
-                        if (!result.status) return client.editReply(interaction, result.message);
-                    });
-                    break;
+        if (getSubCommand === "text2image") {
+            await uAPI.V1.AI.TextToImage.Generate({
+                version: parseInt(getVersion),
+                prompt: getPrompt
 
-                case "v2":
-                    await uAPI.V1.AI.ChatGPT.Model9v4(getPrompt).then(result => {
-                        if (result.status) return client.sendEmbedText(interaction, result.data.text);
-                        if (!result.status) return client.editReply(interaction, result.message);
-                    });
-                    break;
-
-                case "v3":
-                    await uAPI.V1.AI.ChatGPT.Model10v4(getPrompt).then(result => {
-                        if (result.status) return client.sendEmbedText(interaction, result.data.text);
-                        if (!result.status) return client.editReply(interaction, result.message);
-                    });
-                    break;
-            
-                default:
-                    break;
-            }
+            }).then(result => {
+                if (result.status) return client.sendEmbedImage(interaction, result.data.url);
+                if (!result.status) return client.editReply(interaction, result.message);
+            });
         }
         if (getSubCommand === "stablediffusion") {
-            switch (getModel) {
-                case "v1":
-                    await uAPI.V1.AI.TextToImage.Model1(getPrompt).then(result => {
-                        if (result.status) return client.sendEmbedImage(interaction, result.data.url);
-                        if (!result.status) return client.editReply(interaction, result.message);
-                    });
-                    break;
+            await uAPI.V1.AI.StableDiffusion.Generate({
+                version: parseInt(getVersion),
+                prompt: getPrompt
 
-                case "v2":
-                    await uAPI.V1.AI.TextToImage.Model2(getPrompt).then(result => {
-                        if (result.status) return client.sendEmbedImage(interaction, result.data.url);
-                        if (!result.status) return client.editReply(interaction, result.message);
-                    });
-                    break;
-
-                case "v3":
-                    await uAPI.V1.AI.TextToImage.Model3(getPrompt).then(result => {
-                        if (result.status) return client.sendEmbedImage(interaction, result.data.url);
-                        if (!result.status) return client.editReply(interaction, result.message);
-                    });
-                    break;
-
-                case "v4":
-                    await uAPI.V1.AI.TextToImage.Model4(getPrompt).then(result => {
-                        if (result.status) return client.sendEmbedImage(interaction, result.data.url);
-                        if (!result.status) return client.editReply(interaction, result.message);
-                    });
-                    break;
-
-                case "v5":
-                    await uAPI.V1.AI.TextToImage.Model5(getPrompt).then(result => {
-                        if (result.status) return client.sendEmbedImage(interaction, result.data.url);
-                        if (!result.status) return client.editReply(interaction, result.message);
-                    });
-                    break;
-
-                case "v6":
-                    await uAPI.V1.AI.TextToImage.Model6(getPrompt).then(result => {
-                        if (result.status) return client.sendEmbedImage(interaction, result.data.url);
-                        if (!result.status) return client.editReply(interaction, result.message);
-                    });
-                    break;
-            
-                default:
-                    break;
-            }
+            }).then(result => {
+                if (result.status) return client.sendEmbedImage(interaction, result);
+                if (!result.status) return client.editReply(interaction, result.message);
+            });
         }
     }
 };

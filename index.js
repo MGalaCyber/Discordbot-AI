@@ -36,5 +36,5 @@ client.login(process.env.DISCORD_TOKEN).then(() => {
     require("./Handlers/loadCommands")(client);
 
 }).catch((err) => {
-    Betterlog.error("1", "Invalid bot Token!".yellow);
+    Betterlog.error("1", `\n${err}`.bgRed);
 });

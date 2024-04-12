@@ -35,7 +35,9 @@
 - `/ping`
 - `/ai google gemini`
 - `/ai blackbox`
-- `/ai chatgpt`
+- `/ai openai gpt`
+- `/ai openai dalle`
+- `/ai text2image`
 - `/ai stablediffusion`
 
 ## 📎 Requirements
@@ -60,8 +62,6 @@ UNIVERSE_TOKEN=REPLACE_HERE
 ```
 - After installation or finishes all you can use `node .` to start the bot. or run file `Start.bat`
 
-## 🔔 Notice!
-Now for Decrypted version is Available on [Ko-Fi Shop](https://ko-fi.com/galaxd1274/shop) & [SociaBuzz](https://sociabuzz.com/galaxd/shop). You can buy like Basic/Master version with Different Features. By buying my project products, you help me to keep motivated and passionate about developing other projects.
 
 ## 🔐 Licensed
 Distributed under the `Apache 2.0 License`. See [`LICENSE`](https://github.com/MGalaCyber/Discordbot-AI/blob/basic/LICENSE) for more information.
